@@ -1,0 +1,25 @@
+{
+  "name": "hadou-discord-bot",
+  "version": "1.0.0",
+  "description": "A simple discord bot.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hadougamer/discord-bot.git"
+  },
+  "keywords": [
+    "Discord",
+    "BOT",
+    "Gamer",
+    "Hadougame"
+  ],
+  "author": "Alex Konrad (Hadou)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hadougamer/discord-bot/issues"
+  },
+  "homepage": "https://github.com/hadougamer/discord-bot#readme"
+}
