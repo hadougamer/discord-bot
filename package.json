@@ -21,5 +21,12 @@
   "bugs": {
     "url": "https://github.com/hadougamer/discord-bot/issues"
   },
-  "homepage": "https://github.com/hadougamer/discord-bot#readme"
+  "homepage": "https://github.com/hadougamer/discord-bot#readme",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "ffmpeg-binaries": "^4.0.0",
+    "node-wit": "^5.0.0",
+    "opusscript": "0.0.7",
+    "ytdl-core": "^2.0.0"
+  }
 }
