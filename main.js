@@ -4,6 +4,7 @@ const Discord 	 = require('discord.js');
 const bot  		 = new Discord.Client();
 
 const credentials = require('./credentials.local.js');
+const minehut     = require('./minehut.js');
 
 // Configure WIT-AI
 const witClient = new Wit({
@@ -22,16 +23,47 @@ bot.on('message', msg => {
       return false;
     }
 
+    // DOC Minehut: https://api.bennydoesstuff.me/
+    if (  msg.content.startsWith('?mine') ) {
+        switch( msg.content ) {
+            case '?mine servers':
+                console.log( '### SERVERS ###' );
+                minehut.getData(
+                    '/servers', 
+                    (res) => {
+                        let body = '';
+                        res.on('data', (data) => {
+                            body += data;
+                            process.stdout.write(data);
+                        });
+
+                        res.on('end', () => {
+                            let counter = 0;
+                            let resp = JSON.parse(body);
+                            let resServers =  [];
+                            for( let i in resp.servers ) {
+                                if( counter < 20 ) {
+                                    resServers
+                                        .push(resp.servers[i].name);
+                                    counter++;                                    
+                                }
+
+                            }
+                            msg.reply(resServers.join(', '));
+                        });
+                    }
+                );
+            break;
+        }
+    }
+
     if ( msg.content.toLowerCase().startsWith('bot') ) {
         if (  msg.content.includes('me conhece')  || msg.content.includes('quem sou eu') ) {
             msg.content = 'Quem é ' + msg.author.username;
         }
 
-        console.log('MSG:' + msg.content );        
-
         witClient.message(msg.content).then((witSuccess) => {
 
-            
             // Better response
             let better = { 
                 confidence: 0, 
