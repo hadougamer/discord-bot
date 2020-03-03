@@ -1,3 +1,4 @@
+const sleep = require('system-sleep');
 const {Wit, log} = require('node-wit');
 const fs 		 = require('fs');
 const Discord 	 = require('discord.js');
@@ -5,6 +6,42 @@ const bot  		 = new Discord.Client();
 
 const credentials = require('./credentials.local.js');
 const minehut     = require('./minehut.js');
+
+let minehut_token = null;
+minehut.login( 
+    credentials.MINEHUT,
+    ( res ) => {
+        let body = '';
+        res.on('data', (data) =>{
+            body += data;
+        });
+        res.on('end', () =>{
+            console.log( body );
+            let json = JSON.parse(body);
+            minehut_token = json.token;
+        });
+    }
+);
+
+// Sleep to wait minehut login
+sleep(2000);
+
+// Send command test
+minehut.send_command(
+    '/say My name is MineHut!',
+    minehut_token,
+    (res) => {
+        let body = '';
+        res.on('data', (data) => {
+            body += data;
+            process.stdout.write(data);
+        });
+
+        res.on('end', () => {
+            console.log(body);
+        });
+    }
+);
 
 // Configure WIT-AI
 const witClient = new Wit({
