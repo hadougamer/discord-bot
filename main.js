@@ -8,6 +8,8 @@ const credentials = require('./credentials.local.js');
 const minehut     = require('./minehut.js');
 
 let minehut_token = null;
+let minehut_id = null;
+
 minehut.login( 
     credentials.MINEHUT,
     ( res ) => {

@@ -13,8 +13,9 @@ const minehut = {
 
     send_command: ( command = '/say Hello Hadou!', token , callback = (res) => { console.log(res) } ) => {
         let headers = {
-            'Content-Type' : 'application/json',
-            'Authorization' : 'Bearer: %s' + token
+            'Content-Type'  : 'application/json',
+            'Accept'        :'application/json',
+            'Authorization' : 'Bearer %s' + token
         };
 
         let body = { command : command };
