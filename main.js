@@ -8,7 +8,7 @@ const credentials = require('./credentials.local.js');
 const minehut     = require('./minehut.js');
 
 let minehut_token = null;
-let minehut_id = null;
+let minehut_session_id = null;
 
 minehut.login( 
     credentials.MINEHUT,
@@ -21,6 +21,7 @@ minehut.login(
             console.log( body );
             let json = JSON.parse(body);
             minehut_token = json.token;
+            minehut_session_id = json.sessionId;
         });
     }
 );
@@ -32,6 +33,7 @@ sleep(2000);
 minehut.send_command(
     '/say My name is MineHut!',
     minehut_token,
+    minehut_session_id,
     (res) => {
         let body = '';
         res.on('data', (data) => {

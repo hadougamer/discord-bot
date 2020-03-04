@@ -11,10 +11,11 @@ const minehut = {
         console.log('Pong!');
     },
 
-    send_command: ( command = '/say Hello Hadou!', token , callback = (res) => { console.log(res) } ) => {
+    send_command: ( command = '/say Hello Hadou!', token , session_id, callback = (res) => { console.log(res) } ) => {
         let headers = {
             'Content-Type'  : 'application/json',
-            'Accept'        :'application/json',
+            'Accept'        : 'application/json',
+            'X-Session-Id'  : session_id,
             'Authorization' : 'Bearer %s' + token
         };
 
