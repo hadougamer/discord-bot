@@ -11,12 +11,13 @@ const minehut = {
         console.log('Pong!');
     },
 
-    send_command: ( command = '/say Hello Hadou!', token , session_id, callback = (res) => { console.log(res) } ) => {
+    send_command: ( command = '/say Hello Hadou!', token , session, callback = (res) => { console.log(res) } ) => {
         let headers = {
-            'Content-Type'  : 'application/json',
-            'Accept'        : 'application/json',
-            'X-Session-Id'  : session_id,
-            'Authorization' : 'Bearer %s' + token
+            'origin' : 'https://minehut.com',
+            'accept' : 'application/json',
+            'Content-Type' : 'application/json',
+            'authorization' : token,
+            'x-session-id' : session
         };
 
         let body = { command : command };
@@ -24,6 +25,16 @@ const minehut = {
         req = minehut.request('POST', '/server/5e5adb6477d32d00b2aa6d80/send_command', headers, callback );
         req.write(JSON.stringify(body));
         req.end();
+    },
+
+    ghost_login: ( token, callback = (res) => { console.log(res) }) => {
+        let headers = {
+            'Content-Type' : 'application/json',
+            'Authorization' : token
+        };
+
+        req = minehut.request('POST', '/users/ghost_login', headers, callback );
+        req.end();  
     },
 
     // Logs to Minehut

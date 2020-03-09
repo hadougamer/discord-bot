@@ -7,8 +7,8 @@ const bot  		 = new Discord.Client();
 const credentials = require('./credentials.local.js');
 const minehut     = require('./minehut.js');
 
-let minehut_token = null;
-let minehut_session_id = null;
+let minehut_token   = null;
+let minehut_session = null;
 
 minehut.login( 
     credentials.MINEHUT,
@@ -18,34 +18,17 @@ minehut.login(
             body += data;
         });
         res.on('end', () =>{
-            console.log( body );
+            //console.log( body );
             let json = JSON.parse(body);
             minehut_token = json.token;
-            minehut_session_id = json.sessionId;
+            minehut_session = json.sessionId
         });
     }
 );
 
 // Sleep to wait minehut login
 sleep(2000);
-
-// Send command test
-minehut.send_command(
-    '/say My name is MineHut!',
-    minehut_token,
-    minehut_session_id,
-    (res) => {
-        let body = '';
-        res.on('data', (data) => {
-            body += data;
-            process.stdout.write(data);
-        });
-
-        res.on('end', () => {
-            console.log(body);
-        });
-    }
-);
+console.log( 'TOKEN: ' + minehut_token );
 
 // Configure WIT-AI
 const witClient = new Wit({
@@ -66,36 +49,57 @@ bot.on('message', msg => {
 
     // DOC Minehut: https://api.bennydoesstuff.me/
     if (  msg.content.startsWith('?mine') ) {
+        let mine_command = '';
+
+        msg.content = msg.content.replace('/', '');
+
         switch( msg.content ) {
-            case '?mine servers':
-                console.log( '### SERVERS ###' );
-                minehut.getData(
-                    '/servers', 
-                    (res) => {
-                        let body = '';
-                        res.on('data', (data) => {
-                            body += data;
-                            process.stdout.write(data);
-                        });
+            case '?mine noite':
+                mine_command = '/time set night';
+            break;
 
-                        res.on('end', () => {
-                            let counter = 0;
-                            let resp = JSON.parse(body);
-                            let resServers =  [];
-                            for( let i in resp.servers ) {
-                                if( counter < 20 ) {
-                                    resServers
-                                        .push(resp.servers[i].name);
-                                    counter++;                                    
-                                }
+            case '?mine dia':
+                mine_command = '/time set day';
+            break;
 
-                            }
-                            msg.reply(resServers.join(', '));
-                        });
-                    }
-                );
+            case '?mine chuva':
+                mine_command = '/weather rain';
+            break;
+
+            case '?mine tempo bom':
+                mine_command = '/weather clear';
+            break;
+
+            case '?mine neve':
+                mine_command = '/time set snow';
+            break;
+
+            case '':
+                return false;
+            break;
+
+            default:
+                mine_command = '/Say [' + msg.author.username + '] : ' + msg.content.replace('?mine', '');
             break;
         }
+
+        // Send command test
+        minehut.send_command(
+            mine_command,
+            minehut_token,
+            minehut_session,
+            (res) => {
+                let body = '';
+                res.on('data', (data) => {
+                    body += data;
+                });
+
+                res.on('end', () => {
+                    console.log(body);
+                    msg.reply( 'Comando Minehut enviado!' );
+                });
+            }
+        );
     }
 
     if ( msg.content.toLowerCase().startsWith('bot') ) {
@@ -135,4 +139,4 @@ bot.on('message', msg => {
     });
 });
 
-bot.on('debug', console.log);
+//bot.on('debug', console.log);
