@@ -71,7 +71,11 @@ bot.on('message', msg => {
             break;
 
             case '?mine neve':
-                mine_command = '/time set snow';
+                mine_command = '/weather snow';
+            break;
+
+            case '?mine porco':
+                mine_command = '/summon pig';
             break;
 
             case '':
